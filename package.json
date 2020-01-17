@@ -22,7 +22,6 @@
         "typescript": "^3.7.5"
     },
     "dependencies": {
-        "pino": "^5.16.0",
-        "pino-pretty": "^3.5.0"
+        "pino": "^5.16.0"
     }
 }

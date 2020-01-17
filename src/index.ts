@@ -1,49 +1,63 @@
 import pino from "pino"
-import {
-    checkLogDirectory,
-    isNode,
-    isTesting,
-    logMethod,
-    LogMethodFunction,
-} from "./util"
+import {functionLogMethod} from "./function"
+import {templateLogMethod} from "./template"
+import {LogMethodFunction} from "./util"
 
-export const initialize = () => {
-    // best way to check if we're in node
-    if (isNode() && !isTesting()) {
-        checkLogDirectory()
+const logMethod = (
+    logger: pino.Logger,
+    method: "debug" | "error" | "info" | "warn",
+): LogMethodFunction => (param: any, ...args: any[]) => {
+    const shouldIgnore = () => logger.levelVal > pino.levels.values[method]
+    const logFn = (message: string) => logger[method](message)
+
+    if (typeof param === "function") {
+        return functionLogMethod(logFn, shouldIgnore)(
+            param,
+            args[0],
+            args[1] ?? undefined,
+        ) as any
     }
+    return templateLogMethod(logFn, shouldIgnore)(param, ...args) as any
+}
 
-    // TODO: figure out a proper way to store this
-    const logger = pino({
-        level: "debug",
-        prettyPrint: {
-            colorize: true,
-            levelFirst: true,
-        },
+let _logger: pino.Logger | undefined = undefined
+const initialize = (options: pino.LoggerOptions = {}) => {
+    _logger = pino({
+        ...options,
     })
-    return logger
-}
-export const logger = initialize()
-
-export interface Logger {
-    debug: LogMethodFunction
-    error: LogMethodFunction
-    info: LogMethodFunction
-    warn: LogMethodFunction
 }
 
-export const getLogger = (file: string): Logger => {
-    if (!logger) {
+const logger = ({
+    __filename: file,
+    ...data
+}: {
+    __filename: string
+} & object): Record<"debug" | "error" | "info" | "warn", LogMethodFunction> => {
+    if (!_logger) {
         throw new Error(
             `Logger was not initialized. Make sure to call initializeLogger!`,
         )
     }
 
-    const child = logger.child({file})
+    const child = _logger.child({file, ...data})
     return {
         debug: logMethod(child, "debug"),
         error: logMethod(child, "error"),
         info: logMethod(child, "info"),
         warn: logMethod(child, "warn"),
+    }
+}
+
+export class Logging {
+    static init() {
+        return initialize()
+    }
+
+    static logger(
+        data: {
+            __filename: string
+        } & object,
+    ) {
+        return logger(data)
     }
 }
