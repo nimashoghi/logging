@@ -1,0 +1,28 @@
+{
+    "name": "@nimashoghi/logging",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "repository": "https://github.com/nimashoghi/logging.git",
+    "author": "Nima Shoghi <nimashoghi@gmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc --build",
+        "watch": "tsc --build --watch"
+    },
+    "devDependencies": {
+        "@nimashoghi/eslint-config": "^0.0.6",
+        "@types/pino": "^5.15.3",
+        "eslint": "^6.8.0",
+        "husky": "^4.0.10",
+        "jest": "^24.9.0",
+        "lint-staged": "^9.5.0",
+        "prettier": "^1.19.1",
+        "ts-node": "^8.6.2",
+        "typescript": "^3.7.5"
+    },
+    "dependencies": {
+        "pino": "^5.16.0",
+        "pino-pretty": "^3.5.0"
+    }
+}
