@@ -8,6 +8,9 @@
     "license": "MIT",
     "scripts": {
         "build": "tsc --build",
+        "lint": "yarn lint:tsc && yarn lint:eslint",
+        "lint:eslint": "eslint ./src/**/*.ts",
+        "lint:tsc": "rm -rf /var/empty/logging && mkdir -p /var/empty/logging/ && tsc --outDir /var/empty/logging/",
         "watch": "tsc --build --watch"
     },
     "devDependencies": {
@@ -23,5 +26,16 @@
     },
     "dependencies": {
         "pino": "^5.16.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": [
+            "eslint --fix --no-ignore",
+            "git add"
+        ]
     }
 }

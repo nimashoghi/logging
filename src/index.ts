@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import pino from "pino"
 import {functionLogMethod} from "./function"
 import {templateLogMethod} from "./template"
@@ -32,7 +34,10 @@ const logger = ({
     ...data
 }: {
     __filename: string
-} & object): Record<"debug" | "error" | "info" | "warn", LogMethodFunction> => {
+} & pino.Bindings): Record<
+    "debug" | "error" | "info" | "warn",
+    LogMethodFunction
+> => {
     if (!_logger) {
         throw new Error(
             `Logger was not initialized. Make sure to call initializeLogger!`,
@@ -56,7 +61,7 @@ export class Logging {
     static logger(
         data: {
             __filename: string
-        } & object,
+        } & pino.Bindings,
     ) {
         return logger(data)
     }
