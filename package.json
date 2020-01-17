@@ -1,6 +1,6 @@
 {
     "name": "@nimashoghi/logging",
-    "version": "0.0.1",
+    "version": "0.0.5",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "repository": "https://github.com/nimashoghi/logging.git",
@@ -11,11 +11,11 @@
         "lint": "yarn lint:tsc && yarn lint:eslint",
         "lint:eslint": "eslint ./src/**/*.ts",
         "lint:tsc": "rm -rf /var/empty/logging && mkdir -p /var/empty/logging/ && tsc --outDir /var/empty/logging/",
+        "prepublishOnly": "tsc --build --clean && rm -rf ./dist/ && yarn build",
         "watch": "tsc --build --watch"
     },
     "devDependencies": {
         "@nimashoghi/eslint-config": "^0.0.6",
-        "@types/pino": "^5.15.3",
         "eslint": "^6.8.0",
         "husky": "^4.0.10",
         "jest": "^24.9.0",
@@ -25,6 +25,7 @@
         "typescript": "^3.7.5"
     },
     "dependencies": {
+        "@types/pino": "^5.15.3",
         "pino": "^5.16.0"
     },
     "husky": {

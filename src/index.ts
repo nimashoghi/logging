@@ -54,8 +54,8 @@ const logger = ({
 }
 
 export class Logging {
-    static init() {
-        return initialize()
+    static init(options?: pino.LoggerOptions) {
+        return initialize(options)
     }
 
     static logger(
