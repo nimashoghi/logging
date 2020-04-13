@@ -64,7 +64,7 @@ export class Logging {
         } & pino.Bindings,
     ) {
         if (_logger === undefined) {
-            Logging.init({level: process.env.LOG_LEVEL})
+            Logging.init({level: process.env.LOG_LEVEL || "info"})
         }
 
         return logger(data)
